@@ -2,14 +2,13 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Yashimishi ❤️</title>
+<title>Happy Birthday Yashimishi ❤️</title>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system;}
 
 body{height:100vh;overflow:hidden;color:white;background:black;}
 
-/* BG */
 .bg{
 position:fixed;width:100%;height:100%;
 background-size:cover;background-position:center;
@@ -17,7 +16,6 @@ filter:blur(12px) brightness(0.5);
 transition:1.5s;z-index:-1;
 }
 
-/* Card */
 .container{
 position:absolute;top:50%;left:50%;
 transform:translate(-50%,-50%);
@@ -28,31 +26,19 @@ backdrop-filter:blur(20px);
 text-align:center;
 }
 
-/* Buttons */
 button{
 padding:12px 16px;margin-top:12px;
 border:none;border-radius:12px;
 background:white;color:#ff4b6e;
 font-weight:600;cursor:pointer;
-transition:0.2s;
 }
-button:active{transform:scale(0.92);}
 
-/* Candle */
 .candle{animation:flicker 1s infinite alternate;}
 @keyframes flicker{50%{transform:scale(1.1);opacity:0.7;}}
 
-/* Glow */
 .glow{animation:glow 0.5s;}
 @keyframes glow{50%{background:rgba(255,200,150,0.3);}}
 
-/* Heartbeat */
-.pulse{animation:pulse 1s infinite;}
-@keyframes pulse{
-50%{transform:scale(1.05);}
-}
-
-/* Heart float */
 .heart{
 position:absolute;bottom:0;
 animation:float 6s linear infinite;
@@ -68,15 +54,11 @@ to{transform:translateY(-100vh);opacity:0;}
 <div class="bg" id="bg"></div>
 
 <audio id="music" loop>
-<source src="B.mp3">
+<source src="song.mp3">
 </audio>
 
 <audio id="blowSound">
 <source src="https://actions.google.com/sounds/v1/human_voices/blow.ogg">
-</audio>
-
-<audio id="tapSound">
-<source src="https://actions.google.com/sounds/v1/cartoon/pop.ogg">
 </audio>
 
 <div class="container" id="card">
@@ -87,51 +69,44 @@ to{transform:translateY(-100vh);opacity:0;}
 
 <script>
 
+/* ✅ FIXED IMAGE PATHS */
 let images=[
-"1. jpg",
-"2. jpg",
-"3. jpg",
-"4. jpg",
-"5. jpg",
-"6. jpg",
-"7. jpg",
-"8. jpg",
-"9. jpg",
-"10. jpg",
-"11. jpg",
-"12. jpg",
-"13. jpg",
-"14. jpg"
+"1.JPG",
+"2.jpg",
+"3.jpg",
+"4.jpg",
+"5.jpg",
+"6.jpg",
+"7.jpg",
+"8.JPG",
+"9.jpg",
+"10.jpg",
+"11.jpg",
+"12.jpg",
+"13.jpg",
+"14.jpg"
 ];
 
 let i=0;
 
-/* HAPTIC */
-function vibrate(){
-if(navigator.vibrate) navigator.vibrate(40);
-}
-
-/* SOUND */
-function tapSound(){
-let s=document.getElementById("tapSound");
-s.currentTime=0;
-s.play().catch(()=>{});
-}
-
 /* START */
 function start(){
-tapSound(); vibrate();
-
 let music=document.getElementById("music");
-music.volume=0.2;
+music.volume=0.3;
 music.play().catch(()=>{});
 
+startSlideshow();
+document.getElementById("bg").style.backgroundImage=`url(${images[0]})`;
+
+showMessage();
+}
+
+/* SLIDESHOW */
+function startSlideshow(){
 setInterval(()=>{
 i=(i+1)%images.length;
 document.getElementById("bg").style.backgroundImage=`url(${images[i]})`;
 },4000);
-
-showMessage();
 }
 
 /* MESSAGE */
@@ -143,12 +118,9 @@ document.getElementById("card").innerHTML=`
 
 type(`Happy Birthday Yashimishi,
 
-Out of everything in this world,
-you truly are the most precious gift anyone could ever have.
+You are the most precious gift anyone could ever have.
 
-You make everything better just by being you.
-
-And today is all about celebrating you ❤️`);
+And I’m really lucky to have you in my life ❤️`);
 }
 
 /* TYPE */
@@ -162,11 +134,12 @@ setTimeout(arguments.callee,25);
 })();
 }
 
-/* CAKE GAME */
+/* 🎂 GAME */
 let c=0;
+
 function startGame(){
 document.getElementById("card").innerHTML=`
-<h3 class="pulse">Make a Wish 🎂</h3>
+<h3>Make a Wish 🎂</h3>
 <div style="font-size:60px;">🎂</div>
 ${[1,2,3,4,5].map(()=>`
 <span class="candle" onclick="blow(this)" style="font-size:28px;">🕯️</span>
@@ -174,11 +147,8 @@ ${[1,2,3,4,5].map(()=>`
 `;
 }
 
-/* BLOW */
 function blow(el){
 if(el.innerHTML==="💨") return;
-
-tapSound(); vibrate();
 
 el.innerHTML="💨";
 c++;
@@ -189,50 +159,20 @@ s.play().catch(()=>{});
 document.body.classList.add("glow");
 setTimeout(()=>document.body.classList.remove("glow"),400);
 
-/* DRAMATIC MOMENT 
-if(c===4){
-document.getElementById("card").classList.add("pulse");
-}*/
-
-/* FINAL */
 if(c===5){
-
-let music=document.getElementById("music");
-music.currentTime=18; // 🔥 adjust to drop
-music.volume=1;
-
-confetti();
-
-setTimeout(()=>ask(),1000);
-}
-}
-
-/* CONFETTI */
-function confetti(){
-for(let i=0;i<80;i++){
-let d=document.createElement("div");
-d.style.position="absolute";
-d.style.width="5px";
-d.style.height="5px";
-d.style.background=`hsl(${Math.random()*360},100%,60%)`;
-d.style.left=Math.random()*100+"vw";
-d.style.top="0";
-document.body.appendChild(d);
-setTimeout(()=>d.style.top="100vh",10);
-setTimeout(()=>d.remove(),2000);
+setTimeout(()=>ask(),800);
 }
 }
 
 /* ASK */
 function ask(){
 document.getElementById("card").innerHTML=`
-<h2>Can i see you today? ❤️</h2>
+<h2>Meet me today? ❤️</h2>
 <button onclick="yes()">Yes 💖</button>
 <button id="no" onmouseover="move()">No 😜</button>
 `;
 }
 
-/* MOVE */
 function move(){
 let b=document.getElementById("no");
 b.style.position="absolute";
@@ -240,10 +180,8 @@ b.style.top=Math.random()*80+"%";
 b.style.left=Math.random()*80+"%";
 }
 
-/* YES */
+/* FINAL */
 function yes(){
-tapSound(); vibrate();
-
 document.getElementById("card").innerHTML=`
 <h2>❤️</h2>
 <p>Thank you so much<br>
