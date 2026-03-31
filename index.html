@@ -229,7 +229,7 @@ function startGame(){
 document.getElementById("card").innerHTML=`
 <h2 class="pulse">Make a Wish 🎂</h2>
 <div style="font-size:60px;">🎂</div>
-${[1,2,3,4,5].map(()=>`
+${[1,2,3].map(()=>`
 <span class="candle" onclick="blow(this)">🕯️</span>
 `).join("")}
 `;
@@ -248,7 +248,7 @@ document.getElementById("blowSound").play().catch(()=>{});
 document.body.classList.add("glow");
 setTimeout(()=>document.body.classList.remove("glow"),400);
 
-if(c===5){
+if(c===3){
 setTimeout(()=>transition(ask),800);
 }
 }
