@@ -1,30 +1,49 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Yashimishi ❤️</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Happy Birthday Yashimishi ❤️</title>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system;}
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:-apple-system, BlinkMacSystemFont, sans-serif;
+-webkit-tap-highlight-color: transparent;
+}
 
 body{
 height:100vh;
-background:#0f0f0f;
-color:white;
 overflow:hidden;
+color:white;
+background:black;
+padding:env(safe-area-inset);
 }
 
-/* Background */
-.bg{
+/* Background layers for cinematic zoom */
+.bg-layer{
 position:fixed;
-width:100%;
-height:100%;
+width:110%;
+height:110%;
+top:-5%;
+left:-5%;
 background-size:cover;
 background-position:center;
-filter:blur(15px) brightness(0.5);
-transition:1.8s ease;
+filter:blur(10px) brightness(0.5);
+transition:opacity 1.5s ease;
+z-index:-2;
+animation:zoom 12s ease-in-out infinite alternate;
+}
+
+.bg-layer.top{
 z-index:-1;
+}
+
+@keyframes zoom{
+from{transform:scale(1);}
+to{transform:scale(1.15);}
 }
 
 /* Card */
@@ -32,81 +51,39 @@ z-index:-1;
 position:absolute;
 top:50%;
 left:50%;
-transform:translate(-50%,-50%) scale(0.95);
-width:92%;
+transform:translate(-50%,-50%);
+width:90%;
 max-width:420px;
 padding:25px;
-border-radius:28px;
-background:rgba(255,255,255,0.08);
-backdrop-filter:blur(25px);
+border-radius:25px;
+background:rgba(255,255,255,0.12);
+backdrop-filter:blur(20px);
 text-align:center;
-box-shadow:0 20px 60px rgba(0,0,0,0.6);
-animation:fadeUp 0.8s ease forwards;
 }
 
-/* Animations */
-@keyframes fadeUp{
-from{opacity:0; transform:translate(-50%,-40%) scale(0.9);}
-to{opacity:1; transform:translate(-50%,-50%) scale(1);}
-}
-
-/* Button */
+/* Buttons */
 button{
-margin-top:18px;
-padding:14px;
-width:100%;
+padding:14px 18px;
+margin-top:12px;
 border:none;
 border-radius:14px;
-background:linear-gradient(135deg,#ff4b6e,#ff758c);
-color:white;
-font-size:16px;
-font-weight:600;
-cursor:pointer;
-transition:0.2s;
-position:relative;
-overflow:hidden;
-}
-
-/* Ripple */
-button::after{
-content:"";
-position:absolute;
-width:10px;height:10px;
 background:white;
-opacity:0.5;
-border-radius:50%;
-transform:scale(0);
-animation:ripple 0.6s linear;
-}
-@keyframes ripple{
-to{transform:scale(15);opacity:0;}
+color:#ff4b6e;
+font-weight:600;
+font-size:16px;
+cursor:pointer;
 }
 
 /* Candle */
-.candle{
-font-size:30px;
-margin:6px;
-cursor:pointer;
-animation:flicker 1s infinite alternate;
-}
+.candle{animation:flicker 1s infinite alternate;}
 @keyframes flicker{
 50%{transform:scale(1.1);opacity:0.7;}
 }
 
 /* Glow */
-.glow{
-animation:glowFlash 0.5s;
-}
-@keyframes glowFlash{
-50%{background:rgba(255,180,120,0.2);}
-}
-
-/* Heartbeat */
-.pulse{
-animation:pulse 1s infinite;
-}
-@keyframes pulse{
-50%{transform:scale(1.05);}
+.glow{animation:glow 0.5s;}
+@keyframes glow{
+50%{background:rgba(255,200,150,0.3);}
 }
 
 /* Hearts */
@@ -123,7 +100,9 @@ to{transform:translateY(-100vh);opacity:0;}
 
 <body>
 
-<div class="bg" id="bg"></div>
+<!-- Two layers for cinematic crossfade -->
+<div class="bg-layer" id="bg1"></div>
+<div class="bg-layer top" id="bg2"></div>
 
 <audio id="music" loop>
 <source src="song.mp3">
@@ -135,74 +114,61 @@ to{transform:translateY(-100vh);opacity:0;}
 
 <div class="container" id="card">
 <h2>🎂 Happy Birthday</h2>
-<h3>Yashimishi ❤️</h3>
-<button onclick="start(event)">Open</button>
+<h3>My Yashimishi ❤️</h3>
+<button onclick="start()">Open</button>
 </div>
 
 <script>
 
 /* IMAGES */
 let images=[
-"1.JPG","2.jpg","3.jpg","4.jpg","5.jpg",
-"6.jpg","7.jpg","8.JPG","9.jpg","10.jpg",
-"11.jpg","12.jpg","13.jpg","14.jpg"
+"1.JPG","2.jpg","3.jpg","4.jpg","5.jpg","6.jpg","7.jpg",
+"8.JPG","9.jpg","10.jpg","11.jpg","12.jpg","13.jpg","14.jpg"
 ];
 
 let i=0;
-
-/* HAPTIC */
-function vibrate(){
-if(navigator.vibrate) navigator.vibrate(40);
-}
-
-/* MUSIC FADE */
-function fadeMusic(){
-let m=document.getElementById("music");
-m.volume=0;
-let v=0;
-let fade=setInterval(()=>{
-v+=0.05;
-m.volume=v;
-if(v>=0.3) clearInterval(fade);
-},200);
-}
+let currentLayer=1;
 
 /* START */
-function start(e){
-vibrate();
-fadeMusic();
-
-document.getElementById("music").play().catch(()=>{});
+function start(){
+let music=document.getElementById("music");
+music.volume=0.4;
+music.play().catch(()=>{});
 
 startSlideshow();
-document.getElementById("bg").style.backgroundImage=`url(${images[0]})`;
-
-transition(showMessage);
+showMessage();
 }
 
-/* SLIDESHOW */
+/* 🎬 CINEMATIC SLIDESHOW */
 function startSlideshow(){
+
+let bg1=document.getElementById("bg1");
+let bg2=document.getElementById("bg2");
+
+bg1.style.backgroundImage=`url(${images[0]})`;
+bg1.style.opacity=1;
+bg2.style.opacity=0;
+
 setInterval(()=>{
 i=(i+1)%images.length;
-document.getElementById("bg").style.backgroundImage=`url(${images[i]})`;
-},4000);
-}
 
-/* TRANSITION */
-function transition(next){
-let card=document.getElementById("card");
-card.style.opacity=0;
-setTimeout(()=>{
-next();
-card.style.opacity=1;
-},400);
+let active = currentLayer===1 ? bg1 : bg2;
+let next = currentLayer===1 ? bg2 : bg1;
+
+next.style.backgroundImage=`url(${images[i]})`;
+next.style.opacity=1;
+active.style.opacity=0;
+
+currentLayer = currentLayer===1 ? 2 : 1;
+
+},5000); // slower = cinematic
 }
 
 /* MESSAGE */
 function showMessage(){
 document.getElementById("card").innerHTML=`
 <p id="msg"></p>
-<button onclick="transition(startGame)">Continue 🎂</button>
+<button onclick="startGame()">Continue 🎂</button>
 `;
 
 type(`Happy Birthday Betu❤️,
@@ -234,31 +200,32 @@ setTimeout(arguments.callee,25);
 
 /* GAME */
 let c=0;
+
 function startGame(){
 document.getElementById("card").innerHTML=`
-<h2 class="pulse">Make a Wish 🎂</h2>
+<h3>Make a Wish 🎂</h3>
 <div style="font-size:60px;">🎂</div>
-${[1,2,3].map(()=>`
-<span class="candle" onclick="blow(this)">🕯️</span>
+${[1,2,3,4,5].map(()=>`
+<span class="candle" onclick="blow(this)" style="font-size:30px;margin:6px;">🕯️</span>
 `).join("")}
 `;
 }
 
-/* BLOW */
 function blow(el){
 if(el.innerHTML==="💨") return;
-
-vibrate();
 
 el.innerHTML="💨";
 c++;
 
-document.getElementById("blowSound").play().catch(()=>{});
+let s=document.getElementById("blowSound");
+s.currentTime=0;
+s.play().catch(()=>{});
+
 document.body.classList.add("glow");
 setTimeout(()=>document.body.classList.remove("glow"),400);
 
-if(c===3){
-setTimeout(()=>transition(ask),800);
+if(c===5){
+setTimeout(()=>ask(),800);
 }
 }
 
@@ -267,11 +234,10 @@ function ask(){
 document.getElementById("card").innerHTML=`
 <h2>Meet me today? ❤️</h2>
 <button onclick="yes()">Yes 💖</button>
-<button id="no" onmouseover="move()">No 😜</button>
+<button id="no" ontouchstart="move()" onmouseover="move()">No 😜</button>
 `;
 }
 
-/* MOVE */
 function move(){
 let b=document.getElementById("no");
 b.style.position="absolute";
@@ -281,8 +247,6 @@ b.style.left=Math.random()*70+"%";
 
 /* FINAL */
 function yes(){
-vibrate();
-
 document.getElementById("card").innerHTML=`
 <h2>❤️</h2>
 <p>Thank you so much<br>
