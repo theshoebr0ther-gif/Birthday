@@ -22,7 +22,7 @@ background:black;
 padding:env(safe-area-inset);
 }
 
-/* Background layers for cinematic zoom */
+/* Cinematic background */
 .bg-layer{
 position:fixed;
 width:110%;
@@ -37,9 +37,7 @@ z-index:-2;
 animation:zoom 12s ease-in-out infinite alternate;
 }
 
-.bg-layer.top{
-z-index:-1;
-}
+.bg-layer.top{z-index:-1;}
 
 @keyframes zoom{
 from{transform:scale(1);}
@@ -61,7 +59,7 @@ backdrop-filter:blur(20px);
 text-align:center;
 }
 
-/* Buttons */
+/* Button */
 button{
 padding:14px 18px;
 margin-top:12px;
@@ -100,7 +98,6 @@ to{transform:translateY(-100vh);opacity:0;}
 
 <body>
 
-<!-- Two layers for cinematic crossfade -->
 <div class="bg-layer" id="bg1"></div>
 <div class="bg-layer top" id="bg2"></div>
 
@@ -114,7 +111,7 @@ to{transform:translateY(-100vh);opacity:0;}
 
 <div class="container" id="card">
 <h2>🎂 Happy Birthday</h2>
-<h3>My Yashimishi ❤️</h3>
+<h3>❤️ My Yashimishi ❤️</h3>
 <button onclick="start()">Open</button>
 </div>
 
@@ -129,17 +126,7 @@ let images=[
 let i=0;
 let currentLayer=1;
 
-/* START */
-function start(){
-let music=document.getElementById("music");
-music.volume=0.4;
-music.play().catch(()=>{});
-
-startSlideshow();
-showMessage();
-}
-
-/* 🎬 CINEMATIC SLIDESHOW */
+/* 🎬 SLIDESHOW */
 function startSlideshow(){
 
 let bg1=document.getElementById("bg1");
@@ -161,7 +148,24 @@ active.style.opacity=0;
 
 currentLayer = currentLayer===1 ? 2 : 1;
 
-},5000); // slower = cinematic
+},5000);
+}
+
+/* AUTO START SLIDESHOW */
+window.onload = () => {
+startSlideshow();
+};
+
+/* START */
+function start(){
+let music=document.getElementById("music");
+
+music.pause();
+music.currentTime=0;
+music.volume=0.4;
+music.play().catch(()=>{});
+
+showMessage();
 }
 
 /* MESSAGE */
@@ -187,18 +191,35 @@ the most beautiful thing to give these तुच्छ people
 ❤️`);
 }
 
-/* TYPE */
-function type(t){
-let i=0, el=document.getElementById("msg");
-(function(){
-if(i<t.length){
-el.innerHTML+=t[i++];
-setTimeout(arguments.callee,25);
+/* ⌨️ SYNC TYPEWRITER */
+function type(text){
+
+let el=document.getElementById("msg");
+el.innerHTML="";
+let i=0;
+let music=document.getElementById("music");
+
+function typing(){
+
+if(i<text.length){
+
+let speed=35;
+
+if(music.currentTime<5) speed=60;
+else if(music.currentTime<15) speed=35;
+else speed=25;
+
+el.innerHTML+=text.charAt(i);
+i++;
+
+setTimeout(typing,speed);
 }
-})();
 }
 
-/* GAME */
+typing();
+}
+
+/* 🎂 GAME */
 let c=0;
 
 function startGame(){
