@@ -106,33 +106,46 @@ let images=[
 
 let i=0;
 
-/* HAPTIC */
-function vibrate(){
-if(navigator.vibrate) navigator.vibrate(40);
-}
+let slideshowInterval;
 
-/* SOUND */
-function tapSound(){
-let s=document.getElementById("tapSound");
-s.currentTime=0;
-s.play().catch(()=>{});
-}
-
-/* START */
+/* 🚀 START */
 function start(){
-tapSound(); vibrate();
-
 let music=document.getElementById("music");
-music.volume=0.2;
+music.volume=0.3;
 music.play().catch(()=>{});
 
-setInterval(()=>{
-i=(i+1)%images.length;
-document.getElementById("bg").style.backgroundImage=`url(${images[i]})`;
-},4000);
-
+startSlideshow();
 showMessage();
 }
+
+/* 🎬 FIXED SLIDESHOW */
+function startSlideshow(){
+
+let bg=document.getElementById("bg");
+
+// set first image immediately
+bg.style.backgroundImage=`url(${images[0]})`;
+
+let index=0;
+
+if(slideshowInterval){
+clearInterval(slideshowInterval);
+}
+
+slideshowInterval=setInterval(()=>{
+index=(index+1)%images.length;
+
+// fade effect
+bg.style.opacity="0.85";
+
+setTimeout(()=>{
+bg.style.backgroundImage=`url(${images[index]})`;
+bg.style.opacity="1";
+},150);
+
+},3000);
+}
+
 
 /* MESSAGE */
 function showMessage(){
