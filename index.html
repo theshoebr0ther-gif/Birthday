@@ -3,58 +3,85 @@
 <head>
 <meta charset="UTF-8">
 <title>Happy Birthday Yashimishi❤️ ❤️</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system;}
 
-body{height:100vh;overflow:hidden;color:white;background:black;}
+body{
+height:100vh;
+overflow:hidden;
+color:white;
+background:black;
+}
 
 /* BG */
 .bg{
-position:fixed;width:100%;height:100%;
-background-size:cover;background-position:center;
+position:fixed;
+width:100%;
+height:100%;
+background-size:cover;
+background-position:center;
 filter:blur(12px) brightness(0.5);
-transition:1.5s;z-index:-1;
+transition:1.5s;
+z-index:-1;
 }
 
 /* Card */
 .container{
-position:absolute;top:50%;left:50%;
+position:absolute;
+top:50%;
+left:50%;
 transform:translate(-50%,-50%);
-width:90%;max-width:420px;
-padding:25px;border-radius:25px;
+width:92%;
+max-width:420px;
+padding:20px;
+border-radius:20px;
 background:rgba(255,255,255,0.1);
 backdrop-filter:blur(20px);
 text-align:center;
 }
 
+/* TEXT scaling */
+h2{font-size:22px;}
+h3{font-size:18px;}
+p{font-size:15px;line-height:1.5;}
+
 /* Buttons */
 button{
-padding:12px 16px;margin-top:12px;
-border:none;border-radius:12px;
-background:white;color:#ff4b6e;
-font-weight:600;cursor:pointer;
-transition:0.2s;
+width:100%;
+padding:14px;
+margin-top:12px;
+border:none;
+border-radius:14px;
+background:white;
+color:#ff4b6e;
+font-weight:600;
+font-size:16px;
+cursor:pointer;
 }
-button:active{transform:scale(0.92);}
 
-/* Candle */
+/* Candle bigger for touch */
+.candle{
+font-size:34px;
+margin:5px;
+display:inline-block;
+}
+
+/* Animations */
 .candle{animation:flicker 1s infinite alternate;}
 @keyframes flicker{50%{transform:scale(1.1);opacity:0.7;}}
 
-/* Glow */
+.pulse{animation:pulse 1s infinite;}
+@keyframes pulse{50%{transform:scale(1.05);}}
+
 .glow{animation:glow 0.5s;}
 @keyframes glow{50%{background:rgba(255,200,150,0.3);}}
 
-/* Heartbeat */
-.pulse{animation:pulse 1s infinite;}
-@keyframes pulse{
-50%{transform:scale(1.05);}
-}
-
-/* Heart float */
+/* Floating hearts */
 .heart{
-position:absolute;bottom:0;
+position:absolute;
+bottom:0;
 animation:float 6s linear infinite;
 }
 @keyframes float{
@@ -124,6 +151,20 @@ startSlideshow();   // start immediately
 function startSlideshow(){
 
 let bg=document.getElementById("bg");
+
+  /* FIX: tap sound */
+function tapSound(){
+let s=document.getElementById("tapSound");
+s.currentTime=0;
+s.play().catch(()=>{});
+}
+
+/* FIX: vibration for mobile */
+function vibrate(){
+if(navigator.vibrate){
+navigator.vibrate(50);
+}
+}
 
 // show first image instantly
 let index=0;
@@ -207,10 +248,13 @@ let c=0;
 function startGame(){
 document.getElementById("card").innerHTML=`
 <h3 class="pulse">Make a Wish 🎂</h3>
-<div style="font-size:60px;">🎂</div>
+<div style="font-size:70px;">🎂</div>
+
+<div style="margin-top:10px;">
 ${[1,2,3,4,5].map(()=>`
-<span class="candle" onclick="blow(this)" style="font-size:28px;">🕯️</span>
+<span class="candle" onclick="blow(this)">🕯️</span>
 `).join("")}
+</div>
 `;
 }
 
