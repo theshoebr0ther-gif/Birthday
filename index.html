@@ -246,59 +246,48 @@ setTimeout(arguments.callee,25);
 /* CAKE GAME */
 let c=0;
 function startGame(){
-
-c = 0; // ✅ reset counter
-
 document.getElementById("card").innerHTML=`
 <h3 class="pulse">Make a Wish 🎂</h3>
-<div style="font-size:70px;">🎂</div>
-
-<div style="margin-top:10px;">
+<div style="font-size:60px;">🎂</div>
 ${[1,2,3,4,5].map(()=>`
-<span class="candle" onclick="blow(this)">🕯️</span>
+<span class="candle" onclick="blow(this)" style="font-size:28px;">🕯️</span>
 `).join("")}
-</div>
 `;
 }
 
 /* BLOW */
 function blow(el){
-
 if(el.innerHTML==="💨") return;
 
-// SAFE execution (no crash)
-try { tapSound(); } catch(e){}
-try { vibrate(); } catch(e){}
+tapSound(); vibrate();
 
 el.innerHTML="💨";
 c++;
 
-// play blow sound safely
 let s=document.getElementById("blowSound");
-if(s){
-s.currentTime=0;
 s.play().catch(()=>{});
-}
 
-// glow effect
 document.body.classList.add("glow");
 setTimeout(()=>document.body.classList.remove("glow"),400);
+
+/* DRAMATIC MOMENT 
+if(c===4){
+document.getElementById("card").classList.add("pulse");
+}*/
 
 /* FINAL */
 if(c===5){
 
 let music=document.getElementById("music");
-
-if(music){
-music.currentTime=18;
+music.currentTime=18; // 🔥 adjust to drop
 music.volume=1;
-}
 
 confetti();
 
 setTimeout(()=>ask(),1000);
 }
 }
+
 
 /* CONFETTI */
 function confetti(){
