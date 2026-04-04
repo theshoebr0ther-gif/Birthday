@@ -104,29 +104,31 @@ let images=[
 "14.jpg"
 ];
 
-let i=0;
-
 let slideshowInterval;
 
-/* 🚀 START */
-function start(){
-let music=document.getElementById("music");
-music.volume=0.3;
-music.play().catch(()=>{});
-
-startSlideshow();
-showMessage();
+/* ✅ PRELOAD IMAGES (fix iPhone delay) */
+function preloadImages() {
+images.forEach(src => {
+let img = new Image();
+img.src = src;
+});
 }
+
+/* 🚀 AUTO START ON LOAD */
+window.onload = function(){
+preloadImages();
+startSlideshow();   // start immediately
+};
 
 /* 🎬 FIXED SLIDESHOW */
 function startSlideshow(){
 
 let bg=document.getElementById("bg");
 
-// set first image immediately
-bg.style.backgroundImage=`url(${images[0]})`;
-
+// show first image instantly
 let index=0;
+bg.style.backgroundImage=`url(${images[index]})`;
+bg.style.opacity="1";
 
 if(slideshowInterval){
 clearInterval(slideshowInterval);
@@ -135,15 +137,25 @@ clearInterval(slideshowInterval);
 slideshowInterval=setInterval(()=>{
 index=(index+1)%images.length;
 
-// fade effect
-bg.style.opacity="0.85";
+// smooth fade
+bg.style.transition="opacity 0.5s";
+bg.style.opacity="0.6";
 
 setTimeout(()=>{
 bg.style.backgroundImage=`url(${images[index]})`;
 bg.style.opacity="1";
-},150);
+},300);
 
 },3000);
+}
+
+/* 🚀 START BUTTON (music + story) */
+function start(){
+let music=document.getElementById("music");
+music.volume=0.3;
+music.play().catch(()=>{}); // required for iPhone
+
+showMessage();
 }
 
 
