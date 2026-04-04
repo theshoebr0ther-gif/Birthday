@@ -160,6 +160,8 @@ clearInterval(slideshowInterval);
 slideshowInterval=setInterval(()=>{
 index=(index+1)%images.length;
 
+// smooth fade
+bg.style.transition="opacity 0.5s";
 bg.style.opacity="0.6";
 
 setTimeout(()=>{
@@ -169,6 +171,7 @@ bg.style.opacity="1";
 
 },3000);
 }
+
 
 /* START */
 function start(){
