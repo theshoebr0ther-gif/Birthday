@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Happy Birthday Yashimishi❤️ ❤️</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system;}
+
+body{height:100vh;overflow:hidden;color:white;background:black;}
+
+/* BG */
+.bg{
+position:fixed;width:100%;height:100%;
+background-size:cover;background-position:center;
+filter:blur(12px) brightness(0.5);
+transition:1.5s;z-index:-1;
+}
+
+/* Card */
+.container{
+position:absolute;top:50%;left:50%;
+transform:translate(-50%,-50%);
+width:90%;max-width:420px;
+padding:25px;border-radius:25px;
+background:rgba(255,255,255,0.1);
+backdrop-filter:blur(20px);
+text-align:center;
+}
+
+/* Buttons */
+button{
+padding:12px 16px;margin-top:12px;
+border:none;border-radius:12px;
+background:white;color:#ff4b6e;
+font-weight:600;cursor:pointer;
+transition:0.2s;
+}
+button:active{transform:scale(0.92);}
+
+/* Candle */
+.candle{animation:flicker 1s infinite alternate;}
+@keyframes flicker{50%{transform:scale(1.1);opacity:0.7;}}
+
+/* Glow */
+.glow{animation:glow 0.5s;}
+@keyframes glow{50%{background:rgba(255,200,150,0.3);}}
+
+/* Heartbeat */
+.pulse{animation:pulse 1s infinite;}
+@keyframes pulse{
+50%{transform:scale(1.05);}
+}
+
+/* Heart float */
+.heart{
+position:absolute;bottom:0;
+animation:float 6s linear infinite;
+}
+@keyframes float{
+to{transform:translateY(-100vh);opacity:0;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="bg" id="bg"></div>
+
+<audio id="music" loop>
+<source src="B.mp3">
+</audio>
+
+<audio id="blowSound">
+<source src="https://actions.google.com/sounds/v1/human_voices/blow.ogg">
+</audio>
+
+<audio id="tapSound">
+<source src="https://actions.google.com/sounds/v1/cartoon/pop.ogg">
+</audio>
+
+<div class="container" id="card">
+<h2>🎂 Happy Birthday</h2>
+<h3>❤️ My Yashimishi ❤️</h3>
+<button onclick="start()">Open</button>
+</div>
+
+<script>
+
+let images=[
+"1.JPG",
+"2.JPG",
+"3.JPG",
+"4.JPG",
+"5.JPG",
+"6.JPG",
+"7.JPG",
+"8.JPG",
+"9.JPG",
+"10.JPG",
+"11.JPG",
+"12.JPG",
+"13.JPG",
+"14.JPG"
+];
+
+let i=0;
+
+/* HAPTIC */
+function vibrate(){
+if(navigator.vibrate) navigator.vibrate(40);
+}
+
+/* SOUND */
+function tapSound(){
+let s=document.getElementById("tapSound");
+s.currentTime=0;
+s.play().catch(()=>{});
+}
+
+/* START */
+function start(){
+tapSound(); vibrate();
+
+let music=document.getElementById("music");
+music.volume=0.2;
+music.play().catch(()=>{});
+
+setInterval(()=>{
+i=(i+1)%images.length;
+document.getElementById("bg").style.backgroundImage=`url(${images[i]})`;
+},4000);
+
+showMessage();
+}
+
+/* MESSAGE */
+function showMessage(){
+document.getElementById("card").innerHTML=`
+<p id="msg"></p>
+<button onclick="startGame()">Continue 🎂</button>
+`;
+
+type(`Happy Birthday Betu❤️,
+
+You are the most precious gift anyone could ever have.
+
+And I’m lucky every single day to have you ❤️
+
+You are, without a doubt, the most beautiful and fun-loving 
+soul on this planet. The way you laugh, the way you light up 
+every room, and the way you turn even the simplest moments into 
+something magical — it’s something I admire every single day.
+
+Being with you feels like living in color, like everything is brighter, 
+lighter, and full of joy. You are not just beautiful on the outside, 
+but your heart, your energy, and your spirit make you truly one of a kind.
+
+May god will always bless you and you bless me with your
+smile😁
+
+Always stay safe and healthy. When you smile is
+
+the most beautiful thing to give these तुच्छ people
+
+❤️`);
+}
+
+/* TYPE */
+function type(t){
+let i=0, el=document.getElementById("msg");
+(function(){
+if(i<t.length){
+el.innerHTML+=t[i++];
+setTimeout(arguments.callee,25);
+}
+})();
+}
+
+/* CAKE GAME */
+let c=0;
+function startGame(){
+document.getElementById("card").innerHTML=`
+<h3 class="pulse">Make a Wish 🎂</h3>
+<div style="font-size:60px;">🎂</div>
+${[1,2,3,4,5].map(()=>`
+<span class="candle" onclick="blow(this)" style="font-size:28px;">🕯️</span>
+`).join("")}
+`;
+}
+
+/* BLOW */
+function blow(el){
+if(el.innerHTML==="💨") return;
+
+tapSound(); vibrate();
+
+el.innerHTML="💨";
+c++;
+
+let s=document.getElementById("blowSound");
+s.play().catch(()=>{});
+
+document.body.classList.add("glow");
+setTimeout(()=>document.body.classList.remove("glow"),400);
+
+/* DRAMATIC MOMENT 
+if(c===4){
+document.getElementById("card").classList.add("pulse");
+}*/
+
+/* FINAL */
+if(c===5){
+
+let music=document.getElementById("music");
+music.currentTime=18; // 🔥 adjust to drop
+music.volume=1;
+
+confetti();
+
+setTimeout(()=>ask(),1000);
+}
+}
+
+/* CONFETTI */
+function confetti(){
+for(let i=0;i<80;i++){
+let d=document.createElement("div");
+d.style.position="absolute";
+d.style.width="5px";
+d.style.height="5px";
+d.style.background=`hsl(${Math.random()*360},100%,60%)`;
+d.style.left=Math.random()*100+"vw";
+d.style.top="0";
+document.body.appendChild(d);
+setTimeout(()=>d.style.top="100vh",10);
+setTimeout(()=>d.remove(),2000);
+}
+}
+
+/* ASK */
+function ask(){
+document.getElementById("card").innerHTML=`
+<h2>Can i see you today? ❤️</h2>
+<button onclick="yes()">Yes 💖</button>
+<button id="no" onmouseover="move()">No 😜</button>
+`;
+}
+
+/* MOVE */
+function move(){
+let b=document.getElementById("no");
+b.style.position="absolute";
+b.style.top=Math.random()*80+"%";
+b.style.left=Math.random()*80+"%";
+}
+
+/* YES */
+function yes(){
+tapSound(); vibrate();
+
+document.getElementById("card").innerHTML=`
+<h2>❤️</h2>
+<p>Thank you so much<br>
+Now call Mr Manish ☎️<br>
+and tell him he is blessed to see you today ❤️</p>
+`;
+
+setInterval(()=>{
+let h=document.createElement("div");
+h.className="heart";
+h.innerHTML="❤️";
+h.style.left=Math.random()*100+"vw";
+document.body.appendChild(h);
+setTimeout(()=>h.remove(),6000);
+},300);
+}
+
+</script>
+
+</body>
+</html>
