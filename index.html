@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Happy Birthday Yashimishi❤️ ❤️</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system;}
@@ -15,7 +15,6 @@ color:white;
 background:black;
 }
 
-/* BG */
 .bg{
 position:fixed;
 width:100%;
@@ -27,7 +26,6 @@ transition:1.5s;
 z-index:-1;
 }
 
-/* Card */
 .container{
 position:absolute;
 top:50%;
@@ -42,12 +40,10 @@ backdrop-filter:blur(20px);
 text-align:center;
 }
 
-/* TEXT scaling */
 h2{font-size:22px;}
 h3{font-size:18px;}
 p{font-size:15px;line-height:1.5;}
 
-/* Buttons */
 button{
 width:100%;
 padding:14px;
@@ -61,16 +57,16 @@ font-size:16px;
 cursor:pointer;
 }
 
-/* Candle bigger for touch */
 .candle{
 font-size:34px;
 margin:5px;
 display:inline-block;
+animation:flicker 1s infinite alternate;
 }
 
-/* Animations */
-.candle{animation:flicker 1s infinite alternate;}
-@keyframes flicker{50%{transform:scale(1.1);opacity:0.7;}}
+@keyframes flicker{
+50%{transform:scale(1.1);opacity:0.7;}
+}
 
 .pulse{animation:pulse 1s infinite;}
 @keyframes pulse{50%{transform:scale(1.05);}}
@@ -78,7 +74,6 @@ display:inline-block;
 .glow{animation:glow 0.5s;}
 @keyframes glow{50%{background:rgba(255,200,150,0.3);}}
 
-/* Floating hearts */
 .heart{
 position:absolute;
 bottom:0;
@@ -115,61 +110,48 @@ to{transform:translateY(-100vh);opacity:0;}
 <script>
 
 let images=[
-"1.jpg",
-"2.jpg",
-"3.jpg",
-"4.jpg",
-"5.jpg",
-"6.jpg",
-"7.jpg",
-"8.jpg",
-"9.jpg",
-"10.jpg",
-"11.jpg",
-"12.jpg",
-"13.jpg",
-"14.jpg"
+"./1.jpg","./2.jpg","./3.jpg","./4.jpg",
+"./5.jpg","./6.jpg","./7.jpg","./8.jpg",
+"./9.jpg","./10.jpg","./11.jpg","./12.jpg",
+"./13.jpg","./14.jpg"
 ];
 
 let slideshowInterval;
+let c = 0;
 
-/* ✅ PRELOAD IMAGES (fix iPhone delay) */
-function preloadImages() {
-images.forEach(src => {
-let img = new Image();
-img.src = src;
-});
-}
-
-/* 🚀 AUTO START ON LOAD */
-window.onload = function(){
-preloadImages();
-startSlideshow();   // start immediately
-};
-
-/* 🎬 FIXED SLIDESHOW */
-function startSlideshow(){
-
-let bg=document.getElementById("bg");
-
-  /* FIX: tap sound */
+/* ✅ GLOBAL FUNCTIONS (FIXED) */
 function tapSound(){
 let s=document.getElementById("tapSound");
 s.currentTime=0;
 s.play().catch(()=>{});
 }
 
-/* FIX: vibration for mobile */
 function vibrate(){
 if(navigator.vibrate){
 navigator.vibrate(50);
 }
 }
 
-// show first image instantly
+/* PRELOAD */
+function preloadImages(){
+images.forEach(src=>{
+let img=new Image();
+img.src=src;
+});
+}
+
+/* AUTO LOAD */
+window.onload=function(){
+preloadImages();
+startSlideshow();
+};
+
+/* SLIDESHOW */
+function startSlideshow(){
+let bg=document.getElementById("bg");
+
 let index=0;
 bg.style.backgroundImage=`url(${images[index]})`;
-bg.style.opacity="1";
 
 if(slideshowInterval){
 clearInterval(slideshowInterval);
@@ -178,8 +160,6 @@ clearInterval(slideshowInterval);
 slideshowInterval=setInterval(()=>{
 index=(index+1)%images.length;
 
-// smooth fade
-bg.style.transition="opacity 0.5s";
 bg.style.opacity="0.6";
 
 setTimeout(()=>{
@@ -190,15 +170,14 @@ bg.style.opacity="1";
 },3000);
 }
 
-/* 🚀 START BUTTON (music + story) */
+/* START */
 function start(){
 let music=document.getElementById("music");
 music.volume=0.3;
-music.play().catch(()=>{}); // required for iPhone
+music.play().catch(()=>{});
 
 showMessage();
 }
-
 
 /* MESSAGE */
 function showMessage(){
@@ -214,20 +193,7 @@ You are the most precious gift anyone could ever have.
 And I’m lucky every single day to have you ❤️
 
 You are, without a doubt, the most beautiful and fun-loving 
-soul on this planet. The way you laugh, the way you light up 
-every room, and the way you turn even the simplest moments into 
-something magical — it’s something I admire every single day.
-
-Being with you feels like living in color, like everything is brighter, 
-lighter, and full of joy. You are not just beautiful on the outside, 
-but your heart, your energy, and your spirit make you truly one of a kind.
-
-May god will always bless you and you bless me with your
-smile😁
-
-Always stay safe and healthy. When you smile is
-
-the most beautiful thing to give these तुच्छ people
+soul on this planet...
 
 ❤️`);
 }
@@ -243,14 +209,15 @@ setTimeout(arguments.callee,25);
 })();
 }
 
-/* CAKE GAME */
-let c=0;
+/* GAME */
 function startGame(){
+c = 0;
+
 document.getElementById("card").innerHTML=`
 <h3 class="pulse">Make a Wish 🎂</h3>
 <div style="font-size:60px;">🎂</div>
 ${[1,2,3,4,5].map(()=>`
-<span class="candle" onclick="blow(this)" style="font-size:28px;">🕯️</span>
+<span class="candle" onclick="blow(this)">🕯️</span>
 `).join("")}
 `;
 }
@@ -259,7 +226,8 @@ ${[1,2,3,4,5].map(()=>`
 function blow(el){
 if(el.innerHTML==="💨") return;
 
-tapSound(); vibrate();
+tapSound();
+vibrate();
 
 el.innerHTML="💨";
 c++;
@@ -267,27 +235,15 @@ c++;
 let s=document.getElementById("blowSound");
 s.play().catch(()=>{});
 
-document.body.classList.add("glow");
-setTimeout(()=>document.body.classList.remove("glow"),400);
-
-/* DRAMATIC MOMENT 
-if(c===4){
-document.getElementById("card").classList.add("pulse");
-}*/
-
-/* FINAL */
 if(c===5){
-
 let music=document.getElementById("music");
-music.currentTime=18; // 🔥 adjust to drop
+music.currentTime=18;
 music.volume=1;
 
 confetti();
-
 setTimeout(()=>ask(),1000);
 }
 }
-
 
 /* CONFETTI */
 function confetti(){
@@ -300,6 +256,7 @@ d.style.background=`hsl(${Math.random()*360},100%,60%)`;
 d.style.left=Math.random()*100+"vw";
 d.style.top="0";
 document.body.appendChild(d);
+
 setTimeout(()=>d.style.top="100vh",10);
 setTimeout(()=>d.remove(),2000);
 }
@@ -324,13 +281,14 @@ b.style.left=Math.random()*80+"%";
 
 /* YES */
 function yes(){
-tapSound(); vibrate();
+tapSound();
+vibrate();
 
 document.getElementById("card").innerHTML=`
 <h2>❤️</h2>
 <p>Thank you so much<br>
 Now call Mr Manish ☎️<br>
-and tell him he is blessed to see you today ❤️</p>
+and tell him he is blessed ❤️</p>
 `;
 
 setInterval(()=>{
